@@ -14,12 +14,19 @@ insert_mode("jj", "<ESC>")
 
 norm_mode("<leader>pv", ":Explore<CR>")
 
-norm_mode("\\", ":w<CR>")
+norm_mode("<A-h>", "<cmd>bprevious<cr>")
+norm_mode("<A-l>", "<cmd>bnext<cr>")
 
-visual_mode("J", ":m '>+1<CR>gv=gv")
-visual_mode("K", ":m '<-2<CR>gv=gv")
+norm_mode("<A-j>", "<cmd>m .+1<cr>==")
+norm_mode("<A-k>", "<cmd>m .-2<cr>==")
+
+insert_mode("<A-j>", "<esc><cmd>m .+1<cr>==gi")
+insert_mode("<A-k>", "<esc><cmd>m .-2<cr>==gi")
+visual_mode("<A-j>", ":m '>+1<cr>gv=gv")
+visual_mode("<A-k>", ":m '<-2<cr>gv=gv")
 
 norm_mode("<leader>nh", ":noh<CR>")
+norm_mode("<C-a>", "ggVG")
 
 norm_mode("<C-u>", "<C-u>zz")
 norm_mode("<C-d>", "<C-d>zz")
@@ -34,6 +41,11 @@ norm_mode("<C-o>", "<C-o>zz")
 norm_mode("%", "%zz")
 norm_mode("*", "*zz")
 norm_mode("#", "#zz")
+
+norm_mode("<C-k>", "<C-w>k")
+norm_mode("<C-j>", "<C-w>j")
+norm_mode("<C-h>", "<C-w>h")
+norm_mode("<C-l>", "<C-w>l")
 
 norm_mode("<left>", '<cmd>echo "Use h to move!!"<CR>')
 norm_mode("<right>", '<cmd>echo "Use l to move!!"<CR>')
