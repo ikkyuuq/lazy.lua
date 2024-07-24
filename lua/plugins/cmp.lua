@@ -24,6 +24,7 @@ return {
 			}),
 			sources = cmp.config.sources({
 				{ name = "nvim_lsp" },
+				{ name = "luasnip" },
 				{ name = "path" },
 			}, {
 				{ name = "buffer" },
@@ -44,7 +45,6 @@ return {
 							item[key] = vim.fn.strcharpart(item[key], 0, width - 1) .. "…"
 						end
 					end
-
 					return item
 				end,
 			},
