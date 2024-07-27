@@ -10,9 +10,13 @@ local visual_mode = function(k, a)
 	vim.keymap.set("v", k, a)
 end
 
-insert_mode("jj", "<ESC>")
+insert_mode("jk", "<ESC>")
+insert_mode("kj", "<ESC>")
 
 norm_mode("<leader>pv", ":Explore<CR>")
+
+norm_mode(";", ":")
+visual_mode(";", ":")
 
 norm_mode("<A-h>", "<cmd>bprevious<cr>")
 norm_mode("<A-l>", "<cmd>bnext<cr>")

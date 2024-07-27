@@ -20,7 +20,7 @@ vim.opt.hlsearch = true
 vim.opt.wrap = false
 
 vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.g.maplocalleader = "\\"
 
 vim.opt.splitbelow = true
 vim.opt.splitright = true
