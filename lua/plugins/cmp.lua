@@ -1,57 +1,28 @@
 return {
-	"hrsh7th/nvim-cmp",
-	version = false, -- last release is way too old
-	event = "InsertEnter",
-	dependencies = {
-		"hrsh7th/cmp-nvim-lsp",
-		"hrsh7th/cmp-buffer",
-		"hrsh7th/cmp-path",
+	{
+		"hrsh7th/nvim-cmp",
+		dependencies = { "hrsh7th/cmp-emoji" },
+		-- @param opts cmp.ConfigSchema
+		opts = function(_, opts)
+			vim.api.nvim_set_hl(0, "MyPmenuSel", { bg = "#45475a", fg = "#a6e3a1", bold = true })
+			table.insert(opts.sources, { name = "lazydev", group_index = 0 })
+			table.insert(opts.sources, { name = "emoji" })
+			table.insert(opts.sources, { name = "treesitter" })
+			if LazyVim.has("nvim-snippets") then
+				table.insert(opts.sources, { name = "snippets" })
+			end
+			opts.experimental = opts.experimental or {}
+			opts.experimental.ghost_text = false
+			opts.window = {
+				completion = {
+					border = "double",
+					winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:MyPmenuSel,Search:None",
+				},
+				documentation = {
+					border = "double",
+					winhighlight = "NormalFloat:Pmenu,FloatBorder:Pmenu,Search:None",
+				},
+			}
+		end,
 	},
-	opts = function()
-		local defaults = require("cmp.config.default")()
-		local cmp = require("cmp")
-		return {
-			mapping = cmp.mapping.preset.insert({
-				["<C-b>"] = cmp.mapping.scroll_docs(-4),
-				["<C-f>"] = cmp.mapping.scroll_docs(4),
-				["<C-Space>"] = cmp.mapping.complete(),
-				["<C-y>"] = LazyVim.cmp.confirm({ select = true }),
-				["<S-CR>"] = LazyVim.cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-				["<C-CR>"] = function(fallback)
-					cmp.abort()
-					fallback()
-				end,
-			}),
-			sources = cmp.config.sources({
-				{ name = "nvim_lsp" },
-				{ name = "luasnip" },
-				{ name = "path" },
-			}, {
-				{ name = "buffer" },
-			}),
-			formatting = {
-				format = function(_, item)
-					local icons = LazyVim.config.icons.kinds
-					if icons[item.kind] then
-						item.kind = icons[item.kind] .. item.kind
-					end
-					local widths = {
-						abbr = vim.g.cmp_widths and vim.g.cmp_widths.abbr or 40,
-						menu = vim.g.cmp_widths and vim.g.cmp_widths.menu or 30,
-					}
-
-					for key, width in pairs(widths) do
-						if item[key] and vim.fn.strdisplaywidth(item[key]) > width then
-							item[key] = vim.fn.strcharpart(item[key], 0, width - 1) .. "…"
-						end
-					end
-					return item
-				end,
-			},
-			experimental = {
-				ghost_text = false,
-			},
-			sorting = defaults.sorting,
-		}
-	end,
 }
