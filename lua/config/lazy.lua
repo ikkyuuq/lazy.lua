@@ -48,3 +48,10 @@ require("lazy").setup({
 	-- automatically check for plugin updates
 	checker = { enabled = true },
 })
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+	pattern = { "*.cshtml", "*.razor" },
+	callback = function()
+		vim.bo.filetype = "html.cshtml.razor"
+	end,
+})
