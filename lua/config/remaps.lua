@@ -1,59 +1,104 @@
-local norm_mode = function(k, a)
-	vim.keymap.set("n", k, a)
+-- Helper functions for setting keymaps
+local function set_keymap(mode, key, action, opts)
+	vim.keymap.set(mode, key, action, opts or {})
 end
 
-local insert_mode = function(k, a)
-	vim.keymap.set("i", k, a)
+local function set_normal_keymap(key, action, opts)
+	set_keymap("n", key, action, opts)
 end
 
-local visual_mode = function(k, a)
-	vim.keymap.set("v", k, a)
+local function set_insert_keymap(key, action, opts)
+	set_keymap("i", key, action, opts)
 end
 
-insert_mode("jk", "<ESC>")
-insert_mode("kj", "<ESC>")
+local function set_visual_keymap(key, action, opts)
+	set_keymap("v", key, action, opts)
+end
 
-norm_mode("<leader>pv", ":Explore<CR>")
+-- Basic mode switching
+set_insert_keymap("jk", "<ESC>")
 
-norm_mode(";", ":")
-visual_mode(";", ":")
+-- File explorer
+set_normal_keymap("<leader>pv", ":Explore<CR>")
 
-norm_mode("<A-h>", "<cmd>bprevious<cr>")
-norm_mode("<A-l>", "<cmd>bnext<cr>")
+-- Navigation
+local navigation_mappings = {
+	{ "<A-h>", "^" },
+	{ "<A-l>", "$" },
+}
 
-norm_mode("<A-j>", "<cmd>m .+1<cr>==")
-norm_mode("<A-k>", "<cmd>m .-2<cr>==")
+for _, mapping in ipairs(navigation_mappings) do
+	set_normal_keymap(unpack(mapping))
+end
 
-insert_mode("<A-j>", "<esc><cmd>m .+1<cr>==gi")
-insert_mode("<A-k>", "<esc><cmd>m .-2<cr>==gi")
-visual_mode("<A-j>", ":m '>+1<cr>gv=gv")
-visual_mode("<A-k>", ":m '<-2<cr>gv=gv")
+-- Line movement
+local line_movement_mappings = {
+	{ "<A-j>", "<cmd>m .+1<cr>==", "n" },
+	{ "<A-k>", "<cmd>m .-2<cr>==", "n" },
+	{ "<A-j>", "<esc><cmd>m .+1<cr>==gi", "i" },
+	{ "<A-k>", "<esc><cmd>m .-2<cr>==gi", "i" },
+	{ "<A-j>", ":m '>+1<cr>gv=gv", "v" },
+	{ "<A-k>", ":m '<-2<cr>gv=gv", "v" },
+}
 
-norm_mode("<leader>nh", ":noh<CR>")
-norm_mode("<C-a>", "ggVG")
+for _, mapping in ipairs(line_movement_mappings) do
+	set_keymap(mapping[3], mapping[1], mapping[2])
+end
 
-norm_mode("<C-u>", "<C-u>zz")
-norm_mode("<C-d>", "<C-d>zz")
-norm_mode("{", "{zz")
-norm_mode("}", "}zz")
-norm_mode("N", "Nzz")
-norm_mode("n", "nzz")
-norm_mode("G", "Gzz")
-norm_mode("gg", "ggzz")
-norm_mode("<C-i>", "<C-i>zz")
-norm_mode("<C-o>", "<C-o>zz")
-norm_mode("%", "%zz")
-norm_mode("*", "*zz")
-norm_mode("#", "#zz")
+-- Window management
+local window_mappings = {
+	{ "<A-,>", "<c-w>5<" },
+	{ "<A-.>", "<c-w>5>" },
+	{ "<A-t>", "<c-w>+" },
+	{ "<A-s>", "<c-w>-" },
+	{ "<C-j>", "<C-w>j" },
+	{ "<C-k>", "<C-w>k" },
+	{ "<C-h>", "<C-w>h" },
+	{ "<C-l>", "<C-w>l" },
+}
 
--- norm_mode("<C-j>", "<C-w>j")
--- norm_mode("<C-k>", "<C-w>k")
--- norm_mode("<C-h>", "<C-w>h")
--- norm_mode("<C-l>", "<C-w>l")
+for _, mapping in ipairs(window_mappings) do
+	set_normal_keymap(unpack(mapping))
+end
 
-norm_mode("<left>", '<cmd>echo "Use h to move!!"<CR>')
-norm_mode("<right>", '<cmd>echo "Use l to move!!"<CR>')
-norm_mode("<up>", '<cmd>echo "Use k to move!!"<CR>')
-norm_mode("<down>", '<cmd>echo "Use j to move!!"<CR>')
+-- Miscellaneous normal mode mappings
+local misc_normal_mappings = {
+	{ "<leader>nh", ":noh<CR>" },
+	{ "<C-u>", "<C-u>zz" },
+	{ "<C-d>", "<C-d>zz" },
+	{ "{", "{zz" },
+	{ "}", "}zz" },
+	{ "N", "Nzz" },
+	{ "n", "nzz" },
+	{ "G", "Gzz" },
+	{ "gg", "ggzz" },
+	{ "<C-i>", "<C-i>zz" },
+	{ "<C-o>", "<C-o>zz" },
+	{ "%", "%zz" },
+	{ "*", "*zz" },
+	{ "#", "#zz" },
+	{ "<left>", '<cmd>echo "Use h to move!!"<CR>' },
+	{ "<right>", '<cmd>echo "Use l to move!!"<CR>' },
+	{ "<up>", '<cmd>echo "Use k to move!!"<CR>' },
+	{ "<down>", '<cmd>echo "Use j to move!!"<CR>' },
+	{ "<S-k>", vim.lsp.buf.hover },
+}
 
-norm_mode("K", vim.lsp.buf.hover)
+for _, mapping in ipairs(misc_normal_mappings) do
+	set_normal_keymap(unpack(mapping))
+end
+
+-- Debugging mappings
+local debug_mappings = {
+	{ "<F1>", ":lua require'dap'.continue()<CR>" },
+	{ "<F2>", ":lua require'dap'.step_into()<CR>" },
+	{ "<F3>", ":lua require'dap'.step_over()<CR>" },
+	{ "<F4>", ":lua require'dap'.step_out()<CR>" },
+	{ "<F5>", ":lua require'dap'.step_back()<CR>" },
+	{ "<F12>", ":lua require'dap'.restart()<CR>" },
+	{ "<leader>dT", ":lua require'dap-go'.debug_test()<CR>" },
+}
+
+for _, mapping in ipairs(debug_mappings) do
+	set_normal_keymap(unpack(mapping))
+end
