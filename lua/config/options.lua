@@ -1,8 +1,9 @@
 vim.opt.guicursor = ""
 
+vim.opt.inccommand = "split"
+
 vim.opt.number = true
 vim.opt.relativenumber = true
-
 vim.wo.number = true
 
 vim.opt.tabstop = 4
@@ -47,3 +48,6 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 
 vim.opt.colorcolumn = "80"
+
+vim.opt.spell = true
+vim.opt.spelllang = { "en_us" }
