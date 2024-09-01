@@ -102,3 +102,26 @@ local debug_mappings = {
 for _, mapping in ipairs(debug_mappings) do
 	set_normal_keymap(unpack(mapping))
 end
+
+-- Kulala keym require('zen-mode').toggle()
+local kulala_mappings = {
+	{ "<leader>kt", ":lua require('kulala').toggle_view()<CR>", { desc = "Toggle Kulala view" } },
+	{ "<leader>kr", ":lua require('kulala').run()<CR>", { desc = "Run Kulala" } },
+}
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "*",
+	callback = function()
+		for _, mapping in ipairs(kulala_mappings) do
+			set_normal_keymap(unpack(mapping))
+		end
+	end,
+})
+
+local zen_mappings = {
+	{ "<leader>zt", ":lua require('zen-mode').toggle()<CR>", { desc = "Toggle Zen Mode" } },
+}
+
+for _, mapping in ipairs(zen_mappings) do
+	set_normal_keymap(unpack(mapping))
+end
