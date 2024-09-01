@@ -11,9 +11,22 @@ return {
 	{
 		"mfussenegger/nvim-dap",
 		config = function()
+			require("overseer").enable_dap()
 			local dap = require("dap")
+			local dapui = require("dapui")
+
+			dap.listeners.after.event_initialized["dapui_config"] = function()
+				dapui.open()
+			end
+			dap.listeners.before.event_terminated["dapui_config"] = function()
+				dapui.close()
+			end
+			dap.listeners.before.event_exited["dapui_config"] = function()
+				dapui.close()
+			end
 
 			local Config = require("lazyvim.config")
+
 			vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
 			for name, sign in pairs(Config.icons.dap) do
@@ -76,7 +89,7 @@ return {
 						request = "launch",
 					},
 					{
-						type = "node",
+						type = "pwa-node",
 						name = "Run test Debugger",
 						request = "launch",
 						runtimeExecutable = "npm",
@@ -86,26 +99,12 @@ return {
 						internalConsoleOptions = "neverOpen",
 						outputCapture = "std",
 						sourceMaps = true,
-						skipFiles = { "<node_internals>/**", "node_modules/**" },
+						skipFiles = { "<node_internals>/**/**", "node_modules/**" },
 					},
 				}
 			end
 		end,
 		keys = {
-			{
-				"<leader>dO",
-				function()
-					require("dap").step_out()
-				end,
-				desc = "Step Out",
-			},
-			{
-				"<leader>do",
-				function()
-					require("dap").step_over()
-				end,
-				desc = "Step Over",
-			},
 			{
 				"<leader>da",
 				function()

@@ -26,8 +26,6 @@ vim.g.maplocalleader = "\\"
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
-vim.opt.mouse = ""
-
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 

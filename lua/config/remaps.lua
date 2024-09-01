@@ -90,33 +90,18 @@ end
 
 -- Debugging mappings
 local debug_mappings = {
-	{ "<F1>", ":lua require'dap'.continue()<CR>" },
-	{ "<F2>", ":lua require'dap'.step_into()<CR>" },
-	{ "<F3>", ":lua require'dap'.step_over()<CR>" },
-	{ "<F4>", ":lua require'dap'.step_out()<CR>" },
-	{ "<F5>", ":lua require'dap'.step_back()<CR>" },
+	{ "<A-2>", ":lua require'dap'.step_into()<CR>" },
+	{ "<A-3>", ":lua require'dap'.step_over()<CR>" },
+	{ "<A-4>", ":lua require'dap'.step_out()<CR>" },
+	{ "<A-1>", ":lua require'dap'.step_back()<CR>" },
 	{ "<F12>", ":lua require'dap'.restart()<CR>" },
 	{ "<leader>dT", ":lua require'dap-go'.debug_test()<CR>" },
+	{ "<leader>td", ":lua require'neotest'.run.run({strategy = 'dap'})<CR>" },
 }
 
 for _, mapping in ipairs(debug_mappings) do
 	set_normal_keymap(unpack(mapping))
 end
-
--- Kulala keym require('zen-mode').toggle()
-local kulala_mappings = {
-	{ "<leader>kt", ":lua require('kulala').toggle_view()<CR>", { desc = "Toggle Kulala view" } },
-	{ "<leader>kr", ":lua require('kulala').run()<CR>", { desc = "Run Kulala" } },
-}
-
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "*",
-	callback = function()
-		for _, mapping in ipairs(kulala_mappings) do
-			set_normal_keymap(unpack(mapping))
-		end
-	end,
-})
 
 local zen_mappings = {
 	{ "<leader>zt", ":lua require('zen-mode').toggle()<CR>", { desc = "Toggle Zen Mode" } },
